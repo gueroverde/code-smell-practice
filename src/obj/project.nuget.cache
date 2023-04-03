@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "w3aBUu+P9hf/TMAJwFBVCeSLAFMyjuo9GvZvorlCsc2UvvD7w7DgSBNXyxKM24SXIkU3WCtSA6+ZXuy9e3VZAQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\miguel.sanchez\\OneDrive - NearShore Technology\\Documents\\CoE.CleanCode.FunctionCodeSmells - refactor Miguel Sánchez\\src\\Program.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\miguel.sanchez\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.15\\microsoft.netcore.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\miguel.sanchez\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.15\\microsoft.windowsdesktop.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\miguel.sanchez\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.15\\microsoft.aspnetcore.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\miguel.sanchez\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.15\\microsoft.netcore.app.host.win-x64.6.0.15.nupkg.sha512"
+  ],
+  "logs": []
+}

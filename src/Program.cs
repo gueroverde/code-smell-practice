@@ -11,7 +11,7 @@ using System.Text;
 
 public class Program {
     public static void Main(string[] args) {
-        DisplayMessage("*** A very sophisticated student grades dashboard ***", centered: true, ConsoleColor.Green);
+        DisplayMessage(getCenterMessage("*** A very sophisticated student grades dashboard ***"), ConsoleColor.Green);
 
         displaySemesterReport();
 
@@ -59,10 +59,13 @@ public class Program {
         return $"\tSubject: {grade.Subject.ToString()}{padding} - Grade: {formattedGrade}\n";
     }
 
+    private static string getCenterMessage(string message)
+    {
+        return message.PadLeft((Console.WindowWidth + message.Length) / 2);
+    }
 
 
-    private static void DisplayMessage(string message, bool centered = false, ConsoleColor color = ConsoleColor.White) {
-        if (centered) message = message.PadLeft((Console.WindowWidth + message.Length) / 2);
+    private static void DisplayMessage(string message, ConsoleColor color = ConsoleColor.White) {
         Console.ForegroundColor = color;
         Console.WriteLine(message);
         Console.ResetColor();

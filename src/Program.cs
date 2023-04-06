@@ -7,74 +7,66 @@
     F4: Dead Function
 */
 
+using System.Text;
+
 public class Program {
     public static void Main(string[] args) {
         DisplayMessage("*** A very sophisticated student grades dashboard ***", centered: true, ConsoleColor.Green);
 
-        DisplayGrades(createSemesterReport("Cleo", "Strong"), new DisplayConfiguration(lastNameFirst: true, showLetterGrade: false));
-        DisplayGrades(createSemesterReport("Olivia", "Allen"), new DisplayConfiguration(lastNameFirst: false, showLetterGrade: false));
-        DisplayGrades(createSemesterReport("Fred", "Cisneros"), new DisplayConfiguration(lastNameFirst: true, showLetterGrade: true));
-        DisplayGrades(createSemesterReport("Julia", "Pacheco"), new DisplayConfiguration(lastNameFirst: false, showLetterGrade: false));
-        DisplayGrades(createSemesterReport("Gene", "Dixon"), new DisplayConfiguration(lastNameFirst: true, showLetterGrade: true));
+        displaySemesterReport();
 
         Console.Write("\n\n\nPress any key to close...");
         Console.ReadKey();
     }
 
+    private static void displaySemesterReport()
+    {
+        DisplayGrades(createSemesterReport("Cleo", "Strong"), new DisplayConfiguration(lastNameFirst: true, showLetterGrade: false));
+        DisplayGrades(createSemesterReport("Olivia", "Allen"), new DisplayConfiguration(lastNameFirst: false, showLetterGrade: false));
+        DisplayGrades(createSemesterReport("Fred", "Cisneros"), new DisplayConfiguration(lastNameFirst: true, showLetterGrade: true));
+        DisplayGrades(createSemesterReport("Julia", "Pacheco"), new DisplayConfiguration(lastNameFirst: false, showLetterGrade: false));
+        DisplayGrades(createSemesterReport("Gene", "Dixon"), new DisplayConfiguration(lastNameFirst: true, showLetterGrade: true));
+    }
+
     private static Semester createSemesterReport(string firstName, string lastName)
     {
-        Student student;
-        Grade math;
-        Grade coding;
-        Grade science;
-        List<Grade> grades = new List<Grade>();
-        
-        math = new Grade(Subject.Math, new Random().Next(5, 11));
-        coding = new Grade(Subject.Coding, new Random().Next(5, 11));
-        science = new Grade(Subject.Science, new Random().Next(5, 11));
-
-        grades.Add(math);
-        grades.Add(coding);
-        grades.Add(science);
-        
-        student = new Student(firstName, lastName);
-        return new Semester(student, grades);
+         return new Semester(new Student(firstName, lastName), new List<Grade> {
+            new Grade(Subject.Math, new Random().Next(5, 11)),
+            new Grade(Subject.Coding, new Random().Next(5, 11)),
+            new Grade(Subject.Science, new Random().Next(5, 11))
+        });
     }
 
     private static void DisplayGrades(Semester semester, DisplayConfiguration displayConfiguration) {
-        string message;
-        
-        string formattedName = displayConfiguration.LastNameFirst ? semester.Student.inversedFullName() : semester.Student.fullName();
-        message = $"Student: { formattedName }\n";
-
-        var maxSubjectLength = semester.maxSubjectLength();
-
-        foreach (var grade in semester.Grades)
-        {
-            string formattedGrade = displayConfiguration.LastNameFirst ? grade.letter() : grade.Value.ToString();
-            var padding = new string(' ', maxSubjectLength - grade.Subject.ToString().Length);
-            message += $"\tSubject: {grade.Subject.ToString()}{padding} - Grade: {formattedGrade}\n";
-        }
+        string message = getMessage(semester, displayConfiguration);
 
         DisplayMessage(message);
     }
 
-    
+    private static string getMessage(Semester semester, DisplayConfiguration displayConfiguration)
+    {
+        string fullName = displayConfiguration.LastNameFirst ? semester.Student.inversedFullName() : semester.Student.fullName();
+        StringBuilder message = new StringBuilder($"Student: {fullName}\n");
+        message.AppendJoin("", semester.Grades.Select(g => GetLineMessageByGrade(g, displayConfiguration, semester.maxSubjectLength())));
+
+        return message.ToString();
+    }
+
+    private static string GetLineMessageByGrade(Grade grade, DisplayConfiguration displayConfiguration, int maxSubjectLength)
+    {
+        string formattedGrade = displayConfiguration.ShowLetterGrade ? grade.letter() : grade.Value.ToString();
+        string padding = new string(' ', maxSubjectLength - grade.Subject.ToString().Length);
+        return $"\tSubject: {grade.Subject.ToString()}{padding} - Grade: {formattedGrade}\n";
+    }
+
+
 
     private static void DisplayMessage(string message, bool centered = false, ConsoleColor color = ConsoleColor.White) {
-        if (centered) {
-            int padding = (Console.WindowWidth + message.Length) / 2;
-            message = message.PadLeft(padding);
-        }
-
-        if(color != ConsoleColor.White)
-            Console.ForegroundColor = color;
-
-        Console.WriteLine(message);   
-
-        if(color != ConsoleColor.White)
-            Console.ForegroundColor = ConsoleColor.White;
-    }
+        if (centered) message = message.PadLeft((Console.WindowWidth + message.Length) / 2);
+        Console.ForegroundColor = color;
+        Console.WriteLine(message);
+        Console.ResetColor();
+    }    
 }
 
 #region services
